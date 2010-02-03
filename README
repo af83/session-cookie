@@ -1,0 +1,28 @@
+In-Cookie Session
+=================
+
+Store session in signed cookie.
+
+Basic Usage
+-----------
+
+// just include session class
+require_once 'session.php';
+
+// start session normally
+start_session();
+
+// Read and write in session
+$_SESSION['foo'] = 'bar';
+
+// juste before output, call session_write_close
+session_write_close();
+
+// now session data have been send to the client via signed cookie. You cannot write on $_SESSION.
+
+echo 'Hello Word';
+
+Custom Signer
+-------------
+
+todo
