@@ -1,13 +1,17 @@
+=================
 In-Cookie Session
 =================
 
-Store session in signed cookie.
+Store session in encrypted cookie.
 
 Basic Usage
------------
+===========
 
 // just include session class
 require_once 'session.php';
+require_once 'Crypt/Blowfish.php'; // pear package, only needed when using SessionInCookie_DefaultCipher
+
+SessionInCookie::setCipher(new SessionInCookie_DefaultCipher('mysecretkey'));
 
 // start session normally
 start_session();
@@ -18,11 +22,44 @@ $_SESSION['foo'] = 'bar';
 // juste before output, call session_write_close
 session_write_close();
 
-// now session data have been send to the client via signed cookie. You cannot write on $_SESSION.
+// WARNING: now session data have been send to the client via encrypted cookie. You *CANNOT* write on $_SESSION.
 
 echo 'Hello Word';
 
-Custom Signer
+Advanced Usage
+==============
+
+Custom cipher
 -------------
 
-todo
+class MyCipher implements SessionInCookie_Cipher
+{
+    public function encrypt($data)
+    {
+        return $data;
+    }
+
+    public function decrypt($data)
+    {
+        return $data;
+    }
+}
+
+SessionInCookie::setCipher(new MyCipher());
+
+Debug
+-----
+
+You can use SessionInCookie_DummyCipher. 
+
+SessionInCookie::setCipher(new SessionInCookie_DummyCipher());
+
+Copyright
+=========
+
+Copyright (c) 2010 AF83
+
+Authors
+=======
+
+François de Metz <fdemetz@af83.com>

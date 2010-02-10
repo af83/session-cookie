@@ -31,9 +31,9 @@
  */
 
 /**
- * Implement this interface for using a special signer
+ * Implement this interface for using a special cipher
  */
-interface SessionInCookie_Signer
+interface SessionInCookie_Cipher
 {
     public function encrypt($data);
 
@@ -41,10 +41,10 @@ interface SessionInCookie_Signer
 }
 
 /**
- * Default Signer
+ * Default Cipher
  * Use pear Crypt_Blowfish
  */
-class SessionInCookie_DefaultSigner implements SessionInCookie_Signer
+class SessionInCookie_DefaultCipher implements SessionInCookie_Cipher
 {
     protected $blowfish = null;
 
@@ -70,10 +70,10 @@ class SessionInCookie_DefaultSigner implements SessionInCookie_Signer
     }
 }
 /**
- * Dummy Signer
+ * Dummy cipher
  * make nothing
  */
-class SessionInCookie_DummySigner implements SessionInCookie_Signer
+class SessionInCookie_DummyCipher implements SessionInCookie_Cipher
 {
 
     public function encrypt($data)
@@ -89,36 +89,36 @@ class SessionInCookie_DummySigner implements SessionInCookie_Signer
 
 /**
  * Custom session handler
- * Save session in signed cookie
+ * Save session in encrypted cookie
  */
 class SessionInCookie
 {
-    protected static $signer = null;
+    protected static $cipher = null;
 
     /**
-     * Set signer
-     * @param SessionInCookie_Signer $signer
+     * Set cipher
+     * @param SessionInCookie_Cipher $cipher
      */
-    public static function setSigner(SessionInCookie_Signer $signer)
+    public static function setCipher(SessionInCookie_Cipher $cipher)
     {
-        self::$signer = $signer;
+        self::$cipher = $cipher;
     }
 
     /**
-     * @return SessionInCookie_Signer
+     * @return SessionInCookie_Cipher
      */
-    protected static function getSigner()
+    protected static function getCipher()
     {
-        if (is_null(self::$signer))
+        if (is_null(self::$cipher))
         {
-            self::setSigner(new SessionInCookie_DefaultSigner('secret'));
+            self::setCipher(new SessionInCookie_DefaultCipher('secret'));
         }
-        return self::$signer;
+        return self::$cipher;
     }
 
     protected function decode($value)
     {
-        return self::getSigner()->decrypt($value);
+        return self::getCipher()->decrypt($value);
     }
 
     /**
@@ -203,7 +203,7 @@ class SessionInCookie
     {
         if (!empty($data))
         {
-            setcookie($id, self::getSigner()->encrypt($data), 0, "/");
+            setcookie($id, self::getCipher()->encrypt($data), 0, "/");
         }
     }
 
