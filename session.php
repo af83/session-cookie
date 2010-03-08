@@ -23,6 +23,7 @@
 
 /**
  * Implement this interface for using a special cipher
+ * @package SessionInCookie
  */
 interface SessionInCookie_Cipher
 {
@@ -34,6 +35,7 @@ interface SessionInCookie_Cipher
 /**
  * Default Cipher
  * Use pear Crypt_Blowfish
+ * @package SessionInCookie
  */
 class SessionInCookie_DefaultCipher implements SessionInCookie_Cipher
 {
@@ -63,6 +65,7 @@ class SessionInCookie_DefaultCipher implements SessionInCookie_Cipher
 /**
  * Dummy cipher
  * make nothing
+ * @package SessionInCookie
  */
 class SessionInCookie_DummyCipher implements SessionInCookie_Cipher
 {
@@ -81,6 +84,7 @@ class SessionInCookie_DummyCipher implements SessionInCookie_Cipher
 /**
  * Custom session handler
  * Save session in encrypted cookie
+ * @package SessionInCookie
  */
 class SessionInCookie
 {
