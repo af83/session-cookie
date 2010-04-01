@@ -191,6 +191,14 @@ class SessionInCookie
     }
 
     /**
+     * only usefull for jackasses
+     */
+    public static function serialize($data)
+    {
+        return self::getCipher()->encrypt($data);
+    }
+
+    /**
      * Needed by session_set_save_handler
      * Write session cookie
      */
