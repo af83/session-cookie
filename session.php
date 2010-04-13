@@ -191,7 +191,6 @@ class SessionInCookie
         if($session)
             $_SESSION = $session;
         return $session ? true : false;
-        return session_decode();
     }
 
     /**
