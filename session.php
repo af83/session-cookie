@@ -187,7 +187,11 @@ class SessionInCookie
      */
     public static function unserialize($value)
     {
-        return session_decode(self::decode($value));
+        $session = unserialize(self::decode($value));
+        if($session)
+            $_SESSION = $session;
+        return $session ? true : false;
+        return session_decode();
     }
 
     /**
