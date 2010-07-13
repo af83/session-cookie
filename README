@@ -47,6 +47,13 @@ class MyCipher implements SessionInCookie_Cipher
 
 SessionInCookie::setCipher(new MyCipher());
 
+Custom cookies params
+---------------------
+
+You can set cookies params like session_set_cookie_params().
+
+SessionInCookie::setCookieParams($lifetime, $path, $domain, $secure = false, $httponly = false);
+
 Debug
 -----
 

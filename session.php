@@ -8,10 +8,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -89,6 +89,33 @@ class SessionInCookie_DummyCipher implements SessionInCookie_Cipher
 class SessionInCookie
 {
     protected static $cipher = null;
+
+    protected static $cookie_params = array(
+        'lifetime' => 0,
+        'path'     => '/',
+        'domain'   => null,
+        'secure'   => false,
+        'httponly' => false
+    );
+
+    /**
+     * Params of cookie (session id and data)
+     * see session_set_cookie_params()
+     * @param Number $lifetime
+     * @param String $path
+     * @param String $domain
+     * @param Boolean $secure
+     * @param Boolean $httponly
+     */
+    public static function setCookieParams($lifetime, $path, $domain, $secure = false, $httponly = false)
+    {
+        session_set_cookie_params($lifetime, $path, $domain, $secure, $httponly);
+        self::$cookie_params['lifetime'] = $lifetime;
+        self::$cookie_params['path']     = $path;
+        self::$cookie_params['domain']   = $domain;
+        self::$cookie_params['secure']   = $secure;
+        self::$cookie_params['httponly'] = $httponly;
+    }
 
     /**
      * Set cipher
@@ -209,7 +236,12 @@ class SessionInCookie
     {
         if (!empty($data))
         {
-            setcookie($id, self::getCipher()->encrypt($data), 0, "/");
+            setcookie($id, self::getCipher()->encrypt($data),
+                      self::$cookie_params['lifetime'],
+                      self::$cookie_params['path'],
+                      self::$cookie_params['domain'],
+                      self::$cookie_params['secure'],
+                      self::$cookie_params['httponly']);
         }
     }
 
